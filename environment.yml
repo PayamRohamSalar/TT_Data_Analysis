@@ -1,0 +1,20 @@
+name: tt_bank
+channels:
+  - defaults
+dependencies:
+  - python=3.11
+  - pandas
+  - numpy
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - jupyter
+  - ipykernel
+  - sqlalchemy
+  - pyyaml
+  - python-dotenv
+  - pytest
+  - pip
+  - pip:
+      - pyodbc
+      - jdatetime

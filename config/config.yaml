@@ -1,0 +1,14 @@
+# تنظیمات غیرحساس پروژه — رمز اتصال در config/.env قرار می‌گیرد، نه اینجا
+
+database:
+  server: "localhost"
+  name: "Alzahra_Final_DB"
+  driver: "ODBC Driver 18 for SQL Server"
+  trust_server_certificate: true
+
+paths:
+  data_raw: "data/raw"
+  data_interim: "data/interim"
+  data_processed: "data/processed"
+  models: "models"
+  reports: "reports"

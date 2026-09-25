@@ -1,0 +1,332 @@
+"""
+اعتبارسنجی «شعبه‌ی اصلی رابطه»ی مشتری (اسکریپت ۱۳) در برابر گزارش‌های رسمی ماهانه‌ی بانک به تفکیک شعبه
+و استان — تنها منبع مستقلی که مانده‌ی سپرده و تسهیلات را در سطح شعبه از خودِ بانک می‌دهد.
+
+منبع مرجع: فایل‌های ماهانه‌ی «جدول شماره۵ — وضعیت منابع و مصارف» (دو شیت: استانی، شعبه‌ای؛ ارقام به
+میلیون ریال) در BANK_REPORTS_DIR. در حال حاضر ۱۳۹۸ تا ۱۴۰۲ موجود است (۱۴۰۳–۱۴۰۴ درخواست شده).
+ترتیب ستون‌ها بین سال‌ها جابه‌جا می‌شود (مثلاً ۱۴۰۲/۱۲ یک ستون NPL ریالی اضافه دارد) — پس ستون‌ها با
+متن سرستون پیدا می‌شوند، نه با شماره.
+
+روش مقایسه (برای هر ماه مشترک):
+  - سپرده‌ی نمونه‌ی ما در سطح حساب به شعبه نسبت داده می‌شود: COALESCE(شعبه‌ی خودِ حساب سوددار، شعبه‌ی اصلی
+    مشتری از dbo.Dim_Customer_Home_Branch). نسخه‌ی «فقط حساب سوددار» هم به‌عنوان خط مبنا محاسبه می‌شود تا
+    ارزش افزوده‌ی استنتاج دیده شود.
+  - تسهیلات نمونه‌ی ما مستقیماً از LoanFileID_Brnach (بدون استنتاج) — کنترلی برای هم‌خوانی کدگذاری شعب.
+  - مرجع بانک: «مانده منابع ریالی» (= جمع چهار نوع سپرده؛ تأییدشده در ۱۴۰۰/۱۱ و ۱۴۰۲/۰۵) و «مانده تسهیلات
+    اعطایی».
+  - چون نمونه فقط بخشی از بانک است، سطح‌ها مقایسه نمی‌شوند؛ الگوها مقایسه می‌شوند: همبستگی پیرسون
+    (روی لگاریتم) و اسپیرمن بین شعب، و «شباهت سهم‌ها» = ۱ − نصف مجموع قدرمطلق اختلاف سهم هر شعبه.
+  - نگاشت رسمی شعبه→استان از خود فایل بانک استخراج می‌شود: دو رقم اول کد شعبه، با تطبیق دقیق جمع شعب هر
+    پیشوند با ردیف استانی همان ماه.
+
+خروجی (data/processed/phase1_market_overview/ و reports/figures/phase1_market_overview/):
+  home_branch_validation_monthly.csv, home_branch_validation_branch_<ماه>.csv,
+  official_branch_province_map.csv, bank_official_province_totals.csv,
+  home_branch_validation.png
+"""
+
+import re
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+from tt_bank.common.persian_plot import fa, setup_persian_font, to_persian_digits
+from tt_bank.db.connection import get_engine
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROCESSED_DIR = PROJECT_ROOT / "data" / "processed" / "phase1_market_overview"
+FIGURES_DIR = PROJECT_ROOT / "reports" / "figures" / "phase1_market_overview"
+BANK_REPORTS_DIR = Path(r"D:\OneDrive\My Projects\Bank_Customer_Segmentation\3_Data\Provinces & Branches Data")
+FIRST_DEPOSIT_MONTH = 139901
+FIRST_LOAN_MONTH = 140001
+MILLION = 1e6
+DETAIL_MONTHS = (140205, 140212)
+setup_persian_font()
+
+
+# ---------------------------------------------------------------- خواندن گزارش‌های بانک
+def normalize(text: str) -> str:
+    text = str(text).replace("ي", "ی").replace("ك", "ک").replace("\u200c", " ")
+    return re.sub(r"\s+", " ", text).strip()
+
+
+COLUMN_RULES = {  # کلید → (شرط روی متن سرستون، اجباری؟)
+    "rial_resources": (lambda h: "مانده منابع ریالی" in h, True),
+    "total_resources": (lambda h: "منابع کل (ریالی" in h, True),
+    # نام ستون بین سال‌ها عوض می‌شود: «مانده تسهیلات اعطایی» یا «مانده تسهیلات اعطایی سال جاری تا تاریخ تهیه گزارش»
+    "loans": (lambda h: h.startswith("مانده تسهیلات اعطایی") and "پایان" not in h, True),
+    "npl": (lambda h: "مطالبات غیرجاری در تاریخ تهیه گزارش" in h, False),
+    "gharz_current": (lambda h: h.endswith("قرض الحسنه جاری"), False),
+    "gharz_saving": (lambda h: h.endswith("قرض الحسنه پس انداز"), False),
+    "short_term": (lambda h: h.endswith("کوتاه مدت"), False),
+    "long_term": (lambda h: h.endswith("بلندمدت"), False),
+    "cheap": (lambda h: h.endswith("سپرده های ارزان قیمت"), False),
+    "expensive": (lambda h: h.endswith("سپرده های گران قیمت"), False),
+}
+
+# پیشوند دورقمی کد شعبه، استان را مشخص می‌کند و برای ۲۷ استان جمع شعب هر پیشوند دقیقاً برابر ردیف استانی گزارش
+# است. برای ۴ پیشوند زیر مرز «مدیریت امور شعب» با کد جغرافیایی یکی نیست (مثلاً «مرکزی کرج» کد ۱۷ دارد) —
+# جمع ۱۷+۴۱ دقیقاً برابر تهران+البرز و ۳۸+۴۰ دقیقاً برابر یزد+خراسان جنوبی است، اما تک‌به‌تک نه. نام شعب هر
+# پیشوند استان را تعیین می‌کند (۳۸: مرکزی یزد، اردکان…؛ ۴۰: مرکزی بیرجند، قائن…؛ ۴۱: فردیس، طالقان…).
+KNOWN_PREFIX_PROVINCE = {"17": "تهران", "38": "یزد", "40": "خراسان جنوبی", "41": "البرز"}
+
+
+def report_month(sheet: pd.DataFrame, path: Path) -> int | None:
+    """ماه از عنوان داخل شیت خوانده می‌شود؛ نام فایل همیشه درست نیست («13990630 n11.xls» تاریخ ۱۳۹۹/۰۸/۳۰ دارد)."""
+    title = " ".join(str(v) for v in sheet.iloc[:3, 0] if pd.notna(v))
+    found = re.search(r"(1[34]\d{2})/(\d{1,2})/\d{1,2}", title)
+    if found:
+        return int(found.group(1)) * 100 + int(found.group(2))
+    digits = re.sub(r"\D", "", path.stem)
+    return int(digits[:6]) if len(digits) >= 8 else None
+
+
+def locate_columns(sheet: pd.DataFrame, first_data_row: int) -> dict[str, int]:
+    """نام هر ستون = اتصال همه‌ی خانه‌های سرستون (ردیف‌های بالای اولین ردیف داده). ستون اختیاری ناموجود حذف می‌شود."""
+    header = {c: normalize(" ".join(str(v) for v in sheet.iloc[:first_data_row, c] if pd.notna(v))) for c in sheet.columns}
+    found = {}
+    for key, (rule, required) in COLUMN_RULES.items():
+        match = next((c for c, h in header.items() if rule(h)), None)
+        if match is not None:
+            found[key] = match
+        elif required:
+            raise KeyError(f"ستون اجباری «{key}» پیدا نشد")
+    return found
+
+
+def read_sheet(sheet: pd.DataFrame, key_col: int) -> tuple[pd.DataFrame, pd.DataFrame]:
+    is_data = pd.to_numeric(sheet[key_col], errors="coerce").notna() & sheet[0].notna()
+    cols = locate_columns(sheet, int(is_data.idxmax()))
+    data = sheet[is_data]
+    values = pd.DataFrame({k: pd.to_numeric(data[c], errors="coerce").fillna(0) * MILLION for k, c in cols.items()})
+    return data, values
+
+
+def branch_prefix(codes: pd.Series) -> pd.Series:
+    return pd.Series(np.where(codes >= 10_000, codes.astype(str), codes.astype(str).str[:2]), index=codes.index)
+
+
+def province_mapping(branches: pd.DataFrame, provinces: pd.DataFrame | None) -> dict[str, str]:
+    """پیشوند → استان با تطبیق دقیق جمع «منابع کل» با ردیف استانی همان ماه؛ پیشوندهای بی‌تطابق از KNOWN_PREFIX_PROVINCE."""
+    sums = branches.groupby(branch_prefix(branches["branch_code"]))["total_resources"].sum()
+    mapping = {}
+    if provinces is not None:
+        remaining = provinces.set_index("province")["total_resources"].to_dict()
+        for prefix, total in sums.items():
+            hits = [name for name, v in remaining.items() if abs(v - total) < 2 * MILLION]
+            if len(hits) == 1:
+                mapping[prefix] = hits[0]
+                remaining.pop(hits[0])
+    for prefix in sums.index:
+        mapping.setdefault(prefix, KNOWN_PREFIX_PROVINCE.get(prefix, "شعب مستقل" if len(prefix) > 2 else "نامشخص"))
+    return mapping
+
+
+def load_bank_reports() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    branch_frames, province_frames = [], []
+    for path in sorted(BANK_REPORTS_DIR.glob("*/*.xls*")):
+        book = pd.ExcelFile(path)
+        if len(book.sheet_names) < 2:
+            print(f"⚠️ {path.name}: شیت شعبه‌ای ندارد — کنار گذاشته شد")
+            continue
+        branch_sheet = pd.read_excel(book, sheet_name=1, header=None)
+        month = report_month(branch_sheet, path)
+        if month is None or month < FIRST_DEPOSIT_MONTH:
+            continue
+        try:
+            data, values = read_sheet(branch_sheet, key_col=0)
+        except KeyError as err:
+            print(f"⚠️ {path.name}: {err} — کنار گذاشته شد")
+            continue
+        branches = pd.concat([pd.DataFrame({"branch_code": pd.to_numeric(data[0]).astype(int), "branch_name": data[1].map(normalize)}), values], axis=1)
+        # در ۱۴۰۲/۰۳ و ۱۴۰۲/۰۴ ردیف «جمع کل» با کد عددی 100 و نام خالی آمده و جمع بانک را دوبرابر می‌کرد
+        branches = branches[(branches["branch_code"] >= 1000) & branches["branch_name"].ne("nan") & branches["branch_name"].ne("")]
+
+        try:  # شیت استانی فقط برای تأیید نگاشت پیشوند→استان و خروجی مرجع؛ نبودن ستون‌هایش مانع اعتبارسنجی نیست
+            pdata, pvalues = read_sheet(pd.read_excel(book, sheet_name=0, header=None), key_col=1)
+            provinces = pd.concat([pd.DataFrame({"province": pdata[0].map(normalize)}), pvalues], axis=1)
+            provinces = provinces[provinces["province"] != "جمع"].assign(year_month=month)
+        except KeyError:
+            provinces = None
+
+        mapping = province_mapping(branches, provinces)
+        branches["province"] = branch_prefix(branches["branch_code"]).map(mapping)
+        branches["year_month"] = month
+        branch_frames.append(branches)
+        if provinces is not None:
+            province_frames.append(provinces)
+        exact = sum(1 for p in mapping if p not in KNOWN_PREFIX_PROVINCE and len(p) == 2)
+        print(f"گزارش {month} ({path.name}): {len(branches)} شعبه، پیشوند با تطبیق دقیق جمع: {exact}")
+
+    all_branches = pd.concat(branch_frames).drop_duplicates(["year_month", "branch_code"], keep="last")  # ماه تکراری: آخرین فایل
+    maps = all_branches[["year_month", "branch_code", "branch_name", "province"]]
+    print(f"ماه‌های معتبر گزارش بانک: {all_branches['year_month'].nunique()}")
+    return all_branches, pd.concat(province_frames), maps
+
+
+# ---------------------------------------------------------------- داده‌ی نمونه
+def load_sample(engine, months: list[int]) -> tuple[pd.DataFrame, pd.DataFrame]:
+    month_list = ",".join(str(m) for m in months)
+    deposits = pd.read_sql(f"""
+        WITH IA AS (  -- یک شعبه به‌ازای هر حساب (GROUP BY به‌جای DISTINCT تا مانده هرگز دوبار شمرده نشود)
+            SELECT CAST(REPLACE(REPLACE(LTRIM(RTRIM(Depositid)),CHAR(13),''),CHAR(10),'') AS numeric(38,0)) AS dep,
+                   MIN(REPLACE(REPLACE(LTRIM(RTRIM(BranchCode)),CHAR(13),''),CHAR(10),''))                AS br
+            FROM dbo.DepositIDInterest
+            GROUP BY CAST(REPLACE(REPLACE(LTRIM(RTRIM(Depositid)),CHAR(13),''),CHAR(10),'') AS numeric(38,0))
+        )
+        SELECT CAST(d.year_mount AS bigint) AS year_month,
+               COALESCE(ia.br, h.branch_code, 'NONE') AS br,
+               CASE WHEN ia.br IS NOT NULL THEN 'account' WHEN h.branch_code IS NOT NULL THEN 'customer' ELSE 'none' END AS how,
+               SUM(CAST(d.avr_total_amount_eq AS float)) AS balance
+        FROM dbo.Deposit_Monthly_Activity d
+        LEFT JOIN IA ia ON ia.dep = d.deposit_id
+        LEFT JOIN dbo.Dim_Customer_Home_Branch h ON h.customer_id = d.customer_id
+        WHERE CAST(d.year_mount AS bigint) IN ({month_list})
+        GROUP BY CAST(d.year_mount AS bigint), COALESCE(ia.br, h.branch_code, 'NONE'),
+                 CASE WHEN ia.br IS NOT NULL THEN 'account' WHEN h.branch_code IS NOT NULL THEN 'customer' ELSE 'none' END
+    """, engine)
+    loans = pd.read_sql(f"""
+        WITH LB AS (
+            SELECT loanfile_id, CAST(Transaction_Date AS bigint) / 100 AS year_month,
+                   MAX(CAST(Total_Remain AS float)) AS balance,
+                   MAX(CAST(Total_Remain AS float) - CAST(MANDE_JARI AS float)) AS npl
+            FROM dbo.Loan_Remain
+            WHERE CAST(Transaction_Date AS bigint) / 100 IN ({month_list})
+            GROUP BY loanfile_id, CAST(Transaction_Date AS bigint) / 100
+        )
+        SELECT lb.year_month, COALESCE(m.branch_code, 'NONE') AS br, SUM(lb.balance) AS balance, SUM(lb.npl) AS npl
+        FROM LB lb LEFT JOIN dbo.vw_Loan_Branch_Map m ON m.loanfile_id = lb.loanfile_id
+        GROUP BY lb.year_month, COALESCE(m.branch_code, 'NONE')
+    """, engine)
+    for df in (deposits, loans):
+        df["br"] = df["br"].astype(str).str.strip()
+    print(f"داده‌ی نمونه: سپرده {len(deposits):,} ردیف (شعبه×ماه×روش)، تسهیلات {len(loans):,} ردیف")
+    return deposits, loans
+
+
+# ---------------------------------------------------------------- مقایسه
+def compare(ours: pd.Series, bank: pd.Series) -> dict:
+    """ours/bank: مانده به تفکیک شعبه یا استان (index = کلید). ours فقط بخش نسبت‌داده‌شده است."""
+    joined = pd.concat([ours.rename("ours"), bank.rename("bank")], axis=1).fillna(0)
+    both = joined[(joined["ours"] > 0) & (joined["bank"] > 0)]
+    shares = joined / joined.sum()
+    return {
+        "units_bank": int((joined["bank"] > 0).sum()),
+        "units_both": len(both),
+        "pearson_log": float(np.corrcoef(np.log(both["ours"]), np.log(both["bank"]))[0, 1]) if len(both) > 2 else np.nan,
+        "spearman": float(both["ours"].rank().corr(both["bank"].rank())) if len(both) > 2 else np.nan,
+        "share_similarity": float(1 - (shares["ours"] - shares["bank"]).abs().sum() / 2),
+    }
+
+
+def branch_series(frame: pd.DataFrame, value: str) -> pd.Series:
+    s = frame[frame["br"] != "NONE"].groupby("br")[value].sum()
+    s.index = pd.to_numeric(s.index, errors="coerce")
+    return s[s.index.notna()].rename(index=int)
+
+
+def validate(bank_branches, bank_provinces, deposits, loans) -> tuple[pd.DataFrame, dict[int, pd.DataFrame]]:
+    rows, details = [], {}
+    for month, bank in bank_branches.groupby("year_month"):
+        bank_by_code = bank.groupby("branch_code")
+        prov_of = bank.drop_duplicates("branch_code").set_index("branch_code")["province"]
+        # سطح استان: هر دو طرف با همان نگاشت کد→استان از شیت شعبه‌ای جمع زده می‌شوند (نه شیت استانی که مرز
+        # «مدیریت امور شعب» دارد و برای ۴ استان با کد شعبه یکی نیست)
+        bank_prov = bank.groupby("province")[["rial_resources", "loans"]].sum()
+
+        dep_m = deposits[deposits["year_month"] == month]
+        if not dep_m.empty:
+            for variant, subset in (("deposit_inferred", dep_m[dep_m["how"] != "none"]), ("deposit_account_only", dep_m[dep_m["how"] == "account"])):
+                ours = branch_series(subset, "balance")
+                bank_dep = bank_by_code["rial_resources"].sum()
+                row = {"year_month": month, "measure": variant, "level": "branch",
+                       "bank_total": bank_dep.sum(), "sample_total": dep_m["balance"].sum(), "sample_assigned": ours.sum()}
+                rows.append({**row, **compare(ours, bank_dep)})
+                ours_prov = ours.groupby(ours.index.map(prov_of)).sum()
+                rows.append({**row, "level": "province", **compare(ours_prov, bank_prov["rial_resources"])})
+                if variant == "deposit_inferred" and month in DETAIL_MONTHS:
+                    details[month] = pd.concat([bank.drop_duplicates("branch_code").set_index("branch_code")[["branch_name", "province", "rial_resources", "loans"]],
+                                                ours.rename("sample_deposit")], axis=1)
+
+        loan_m = loans[loans["year_month"] == month]
+        if not loan_m.empty:
+            ours = branch_series(loan_m, "balance")
+            bank_loan = bank_by_code["loans"].sum()
+            row = {"year_month": month, "measure": "loan_direct", "level": "branch",
+                   "bank_total": bank_loan.sum(), "sample_total": loan_m["balance"].sum(), "sample_assigned": ours.sum()}
+            rows.append({**row, **compare(ours, bank_loan)})
+            ours_prov = ours.groupby(ours.index.map(prov_of)).sum()
+            rows.append({**row, "level": "province", **compare(ours_prov, bank_prov["loans"])})
+            if month in details:
+                details[month]["sample_loan"] = ours
+
+    result = pd.DataFrame(rows)
+    result["coverage_pct"] = result["sample_total"] / result["bank_total"] * 100
+    result["assigned_share_pct"] = result["sample_assigned"] / result["sample_total"] * 100
+    return result, details
+
+
+def plot(result: pd.DataFrame, details: dict[int, pd.DataFrame]) -> None:
+    fig, axes = plt.subplots(1, 2, figsize=(15, 6))
+    ax = axes[0]
+    styles = {("deposit_inferred", "branch"): ("سپرده — استنتاج شعبه‌ی مشتری", "tab:blue", "-"),
+              ("deposit_account_only", "branch"): ("سپرده — فقط حساب سوددار", "tab:blue", ":"),
+              ("loan_direct", "branch"): ("تسهیلات — شعبه‌ی قرارداد", "tab:orange", "-"),
+              ("deposit_inferred", "province"): ("سپرده — سطح استان", "tab:green", "--")}
+    all_months = sorted(result["year_month"].unique())
+    position = {m: i for i, m in enumerate(all_months)}
+    for (measure, level), (label, color, ls) in styles.items():
+        s = result[(result["measure"] == measure) & (result["level"] == level)].sort_values("year_month")
+        if not s.empty:
+            ax.plot(s["year_month"].map(position), s["share_similarity"] * 100, color=color, linestyle=ls, label=fa(label), linewidth=2)
+    ticks = list(range(0, len(all_months), max(1, len(all_months) // 8)))
+    ax.set_xticks(ticks)
+    ax.set_xticklabels([to_persian_digits(f"{all_months[i] // 100}/{all_months[i] % 100:02d}") for i in ticks], rotation=30, fontsize=8)
+    ax.set_ylim(0, 100)
+    ax.set_ylabel(fa("شباهت سهم‌ها با گزارش رسمی بانک (درصد)"))
+    ax.set_title(fa("هم‌خوانی توزیع شعبه‌ای نمونه با گزارش ماهانه‌ی بانک"))
+    ax.yaxis.set_major_formatter(lambda v, pos: to_persian_digits(f"{v:.0f}"))
+    ax.legend(fontsize=8)
+
+    ax = axes[1]
+    month = max(details)
+    d = details[month].dropna(subset=["rial_resources", "sample_deposit"])
+    d = d[(d["rial_resources"] > 0) & (d["sample_deposit"] > 0)]
+    ax.scatter(d["rial_resources"] / 1e12, d["sample_deposit"] / 1e12, s=10, alpha=0.6)
+    lim = [min(d["rial_resources"].min(), d["sample_deposit"].min()) / 1e12, max(d["rial_resources"].max(), d["sample_deposit"].max()) / 1e12]
+    ax.plot(lim, lim, color="grey", linewidth=1, linestyle="--")
+    ax.set_xscale("log"); ax.set_yscale("log")
+    ax.set_xlabel(fa("مانده‌ی سپرده‌ی شعبه در گزارش رسمی بانک (هزار میلیارد ریال)"))
+    ax.set_ylabel(fa("مانده‌ی سپرده‌ی نسبت‌داده‌شده در نمونه (هزار میلیارد ریال)"))
+    ax.set_title(fa(f"مقایسه‌ی شعبه‌به‌شعبه — {to_persian_digits(f'{month // 100}/{month % 100:02d}')}"))
+    fig.tight_layout()
+    fig.savefig(FIGURES_DIR / "home_branch_validation.png", dpi=150)
+    plt.close(fig)
+
+
+def main() -> None:
+    bank_branches, bank_provinces, maps = load_bank_reports()
+    months = sorted(bank_branches["year_month"].unique())
+    deposits, loans = load_sample(get_engine(), months)
+    result, details = validate(bank_branches, bank_provinces, deposits, loans)
+
+    result.to_csv(PROCESSED_DIR / "home_branch_validation_monthly.csv", index=False)
+    for month, detail in details.items():
+        detail.reset_index().rename(columns={"index": "branch_code"}).to_csv(PROCESSED_DIR / f"home_branch_validation_branch_{month}.csv", index=False)
+    latest = maps["year_month"].max()
+    maps[maps["year_month"] == latest].to_csv(PROCESSED_DIR / "official_branch_province_map.csv", index=False)
+    bank_provinces.to_csv(PROCESSED_DIR / "bank_official_province_totals.csv", index=False)
+    plot(result, details)
+
+    summary = result.groupby(["measure", "level"])[["coverage_pct", "assigned_share_pct", "pearson_log", "spearman", "share_similarity"]].median()
+    print("\n=== میانه‌ی شاخص‌ها روی همه‌ی ماه‌های مشترک ===")
+    print(summary.round(3).to_string())
+    for month in DETAIL_MONTHS:
+        print(f"\n=== {month} ===")
+        print(result[result["year_month"] == month].drop(columns=["year_month"]).round(3).to_string(index=False))
+
+
+if __name__ == "__main__":
+    main()

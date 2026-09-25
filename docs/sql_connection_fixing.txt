@@ -1,0 +1,44 @@
+راه حلی که قبلا هم جواب داد این بود:
+راه‌حل درست‌تر: به‌جای اجرای دستی exe، از SQL Server Configuration Manager استفاده کنیم تا پارامتر `-m` را مستقیماً روی همان سرویس ثبت‌شده اضافه کنیم — این‌طور مسیرهای صحیح (`D:\SQLServer\...`) هم حفظ می‌شوند.
+لطفاً این مراحل را انجام دهید:
+۱. پنجره‌ی فعلی را ببندید:
+در همان پنجره که `sqlservr.exe -m` در حال اجراست، `Ctrl+C` بزنید (یا اگر واکنش نداد، همان پنجره را ببندید).
+۲. SQL Server Configuration Manager را باز کنید:
+در Start منو بنویسید: `SQL Server Configuration Manager` و بازش کنید.
+۳. پارامتر راه‌اندازی تک‌کاربره را اضافه کنید:
+
+* در ستون چپ روی SQL Server Services کلیک کنید.
+* روی SQL Server (MSSQLSERVER) در سمت راست، راست‌کلیک → Properties.
+* به تب Startup Parameters بروید.
+* در کادر "Specify a startup parameter"، بنویسید: `-m`
+* دکمه Add را بزنید، سپس OK / Apply.
+
+۴. سرویس را ری‌استارت کنید:
+در همان Configuration Manager یا در یک PowerShell با دسترسی Administrator:
+
+```
+Restart-Service -Name "MSSQLSERVER" -Force
+```
+
+۵. حالا در یک پنجره‌ی دیگر (همچنان Administrator) وصل شوید:
+
+```
+sqlcmd -S localhost -E -C
+```
+
+و همان دستورات قبلی را اجرا کنید:
+
+```
+CREATE LOGIN [desktop-ngqp0el\payam] FROM WINDOWS;
+GO
+ALTER SERVER ROLE sysadmin ADD MEMBER [desktop-ngqp0el\payam];
+GO
+EXIT
+```
+
+۶. بعد از موفقیت، حتماً پارامتر `-m` را از Configuration Manager حذف کنید و دوباره `Restart-Service -Name "MSSQLSERVER" -Force` بزنید تا سرور به حالت عادی (چندکاربره) برگردد.
+لطفاً یا نتیجه‌ی این روش را بگویید، یا اگر ترجیح می‌دهید اول بفهمیم چرا روش قبلی گیر کرد، متن کامل آن پنجره را برایم کپی کنید.
+
+لطفا این روش را در فایل docs/02_sql_server_access_fix.md جایگزین روش قبلی کن.
+
+ضمنا دسترسی برقرار شد. میتوانی کار را ادامه دهی.
