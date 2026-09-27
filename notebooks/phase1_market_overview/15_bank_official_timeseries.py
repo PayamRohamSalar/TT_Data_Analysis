@@ -221,7 +221,7 @@ def main():
     # 3. Build province mapping (One-pass logic)
     new_format_map = all_branches[all_branches["source_format"] == "new"].dropna(subset=["province"])
     new_map_dict = new_format_map.groupby("branch_code")["province"].last().to_dict()
-    new_map_dict[313] = "تهران"
+    new_map_dict[313] = "شعب مستقل"
     
     map_records = []
     final_map_dict = {}
@@ -233,7 +233,7 @@ def main():
             final_map_dict[code] = prov
             
             prefix = str(code)[:2]
-            fallback = "تهران" if code == 313 else KNOWN_PREFIX_PROVINCE.get(prefix, "نامشخص")
+            fallback = "شعب مستقل" if code == 313 else KNOWN_PREFIX_PROVINCE.get(prefix, "نامشخص")
             
             if prov == fallback or fallback == "نامشخص":
                 source = "direct_new_format"
@@ -259,6 +259,7 @@ def main():
         return any(kw in n for kw in admin_keywords)
         
     all_branches["is_admin_unit"] = all_branches["branch_name"].map(is_admin)
+    all_branches.loc[all_branches["branch_code"] == 313, "is_admin_unit"] = True
     
     # 5. Output files
     

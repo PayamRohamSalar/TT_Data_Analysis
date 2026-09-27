@@ -1,7 +1,6 @@
 # Secrets
 .env
 config/*.local.yaml
-
 # Data & models (large / sensitive — never versioned)
 data/raw/*
 data/interim/*
@@ -13,7 +12,6 @@ models/*
 !models/.gitkeep
 reports/figures/*
 !reports/figures/.gitkeep
-
 # Python
 __pycache__/
 *.pyc
@@ -22,17 +20,15 @@ __pycache__/
 build/
 dist/
 .pytest_cache/
-
 # Conda / venv
 .conda/
 venv/
-
 # OS / IDE
 .DS_Store
 Thumbs.db
 .vscode/*
 !.vscode/extensions.json
-
 # Run logs (console output — reproducible by re-running the scripts)
 logs/
 *.log
+reports/confidential/
