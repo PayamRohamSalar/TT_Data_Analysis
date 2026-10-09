@@ -91,5 +91,24 @@ idx.column_dimensions["C"].width = 14
 for row in idx.iter_rows(min_row=2):
     for c in row[:2]:
         c.alignment = al
+
+# --- پیوست: سری ماهانه‌ی نسبت مطالبات غیرجاری (بانک و نمونه) ---
+import pandas as pd
+_c = pd.read_csv(ROOT / "data" / "processed" / "phase1_market_overview" / "bank_coverage_monthly.csv")
+_c = _c[_c.npl_coverage_reliable.astype(str) == "True"].copy()
+_c["bank_ratio"] = 100 * _c.bank_npl / _c.bank_loans
+_c["sample_ratio"] = 100 * _c.sample_npl / _c.sample_loans
+_c["diff"] = _c.sample_ratio - _c.bank_ratio
+ws2 = wb.create_sheet("پیوست سری NPL")
+ws2.append(["ماه", "نسبت رسمی بانک (٪)", "نسبت نمونه (٪)", "اختلاف (واحد درصد)"])
+for _, x in _c.iterrows():
+    ym = str(int(x.year_month)); ws2.append([ym[4:] + "/" + ym[:4], round(x.bank_ratio, 2), round(x.sample_ratio, 2), round(x["diff"], 2)])
+ws2.append([])
+ws2.append(["تعداد ماه", len(_c)])
+ws2.append(["همبستگی", round(_c.bank_ratio.corr(_c.sample_ratio), 3)])
+ws2.append(["میانگین قدرمطلق اختلاف", round(_c["diff"].abs().mean(), 3)])
+ws2.append(["ماه‌های با اختلاف کمتر از یک واحد", int((_c["diff"].abs() < 1).sum())])
+for col in "ABCD":
+    ws2.column_dimensions[col].width = 28
 wb.save(OUT)
 print("WROTE", OUT, "sheets:", order, "tables:", total)
