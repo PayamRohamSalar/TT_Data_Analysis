@@ -51,10 +51,13 @@ MaxBalance AS (
     GROUP BY customer_id
 ),
 Tenure AS (
-    -- قدمت بر اساس اولین حساب سپرده‌ی افتتاح‌شده
+    -- قدمت بر اساس اولین (قدیمی‌ترین) حساب سپرده‌ی مشتری: بیشینه‌ی قدمت میان حساب‌ها.
+    -- 🐛 رفع‌شده (۲۰۲۶-۱۰-۰۸): نسخه‌ی قبلی از MIN استفاده می‌کرد و در عمل قدمت «جدیدترین» حساب را می‌گرفت؛
+    --    در نتیجه مشتریانی که اخیراً حساب دیگری هم باز کرده بودند به‌اشتباه غیرفعال محسوب می‌شدند
+    --    (۸۴.۵۸٪ به‌جای ۹۰.۳۴٪ فعال در اسفند ۱۴۰۴).
     SELECT
         CAST(LTRIM(RTRIM(MAIN_CUSTOMER_ID)) AS numeric(38,0)) AS customer_id,
-        MIN(
+        MAX(
             (1404 - CAST(LEFT(LTRIM(RTRIM(OPEN_DATE)), 4) AS INT)) * 12
             + (12 - CAST(SUBSTRING(LTRIM(RTRIM(OPEN_DATE)), 6, 2) AS INT))
         ) AS tenure_months
