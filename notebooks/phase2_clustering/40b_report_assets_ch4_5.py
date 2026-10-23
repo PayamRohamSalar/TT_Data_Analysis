@@ -176,8 +176,8 @@ finish(fig, "f5_8_credit_view.png")
 # پتانسیل ناخالص فروش تسهیلات
 t2 = pd.read_csv(D / "s6_table_6_2.csv"); t2 = t2[t2.segment.isin(["C1", "C3", "C6"])]
 t53 = pd.DataFrame({"خوشه": [f"{NAME[s]} ({s})" for s in t2.segment], "سپرده‌گذار بدون وام": t2.no_loan_customers, "دارای مانده‌ی کافی": t2.eligible, "سپرده‌ی دارای مانده‌ی کافی (همت)": t2.eligible_deposit_hemat,
-                    "با مانده‌ی ۱۰۰ میلیون تومان و بیشتر": t2.eligible_100mt, "سپرده‌ی گروه ۱۰۰ میلیون تومان و بیشتر (همت)": t2.eligible_100mt_deposit_hemat, "میانه‌ی وام وام‌گیران خوشه (میلیون تومان)": t2.borrower_median_loan_mtoman, "سقف محاسباتی (همت)": t2.reference_ceiling_hemat})
-save_table(t53, "t5_3_sales_potential", "جدول ۵-۳: پتانسیل ناخالص فروش تسهیلات به سپرده‌گذاران بدون وام", nd={"سپرده‌ی دارای مانده‌ی کافی (همت)": 2, "سپرده‌ی گروه ۱۰۰ میلیون تومان و بیشتر (همت)": 2, "میانه‌ی وام وام‌گیران خوشه (میلیون تومان)": 0, "سقف محاسباتی (همت)": 2})
+                    "با مانده‌ی ۱۰۰ میلیون تومان و بیشتر": t2.eligible_100mt, "سپرده‌ی گروه ۱۰۰ میلیون تومان و بیشتر (همت)": t2.eligible_100mt_deposit_hemat, "میانه‌ی مبلغ وام در خوشه (میلیون تومان)": t2.borrower_median_loan_mtoman, "سقف محاسباتی (همت)": t2.reference_ceiling_hemat})
+save_table(t53, "t5_3_sales_potential", "جدول ۵-۳: پتانسیل ناخالص فروش تسهیلات به سپرده‌گذاران بدون وام", nd={"سپرده‌ی دارای مانده‌ی کافی (همت)": 2, "سپرده‌ی گروه ۱۰۰ میلیون تومان و بیشتر (همت)": 2, "میانه‌ی مبلغ وام در خوشه (میلیون تومان)": 0, "سقف محاسباتی (همت)": 2})
 fig, ax = plt.subplots(figsize=(8.4, 4.2)); x = np.arange(len(t2)); w = .38
 ax.bar(x - w / 2, t2.eligible_100mt, w, color=NAVY, label="تعداد مشتری با مانده‌ی ۱۰۰ میلیون تومان و بیشتر"); ax.set_ylabel("تعداد مشتری"); ax.yaxis.set_major_formatter(FuncFormatter(lambda v, p: fd(f"{v / 1e3:g}") + " هزار")); ax2 = ax.twinx()
 ax2.bar(x + w / 2, t2.eligible_100mt_deposit_hemat, w, color=ORANGE, label="سپرده‌ی آنان (همت)"); ax2.set_ylabel("سپرده (همت)"); ax2.grid(False); ax2.spines["right"].set_visible(True)

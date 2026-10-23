@@ -1,0 +1,8 @@
+﻿check_item,finding,status,severity
+Total Paragraphs & Content Volume,358 paragraphs,تأیید کامل,بدون اشکال
+Heading Structure & Hierarchy,"60 structured headings (Heading 1, 2, 3)",تأیید کامل,بدون اشکال
+Embedded Tables Count,20 tables embedded with borders and cell formatting,تأیید کامل,بدون اشکال
+Embedded Figures Count,40 images embedded,تأیید کامل,بدون اشکال
+RTL / Persian Typography,"Bidi/RTL applied across paragraphs; fonts include B Nazanin, Cambria, B Titr",تأیید کامل,بدون اشکال
+Table Caption Positioning,Table captions formatted as bold paragraph before/above tables,تأیید کامل,بدون اشکال
+Figure Caption Positioning,Figure captions placed below images in bold,تأیید کامل,بدون اشکال

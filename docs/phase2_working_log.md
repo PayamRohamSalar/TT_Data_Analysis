@@ -174,3 +174,7 @@ D15 و D16 تأیید شد. گروه T (101,399 وام‌گیر با سپرده�
 ## ۲۴. نگارش فصل‌های ۳ تا ۶ و پیوست‌ها (2026-10-23)
 
 متن کامل گزارش در `reports/phase2_report_src/` (ch0_front، ch0_summary، ch1 تا ch6، ch7_request، appendix، refs) و مونتاژ در `reports/phase2_final_report.md` (18 هزار کلمه با جدول و مراجع؛ 39 نمودار و 18 جدول). پیش‌نویس docx: `reports/phase2_final_report_draft.docx` (با `parse_md.py reports/phase2_final_report.md` سپس `FIG_SUBDIR=phase2_final node build_docx.js خروجی.docx`)؛ اکسل پیوست: `reports/phase2_tables_appendix_v1.xlsx` (توجه: `parse_md.py` کش مشترک `.cache/report_blocks.json` را بازنویسی می‌کند؛ برای بازتولید فاز 1 دوباره اجرا شود). `{{TCAP:...}}` برای جدول‌های دستی. حجم تخمینی 65 تا 70 صفحه (متن 12.8 هزار کلمه + نمودارها و جدول‌ها)؛ کاهش به 50 تا 60 با انتقال نمودارها و جدول‌های کم‌اهمیت‌تر به پیوست ممکن است.
+
+## ۲۵. داوری نهایی گزارش (2026-10-23)
+
+`reports/review_final/` (Antigravity): کیفیت ضعیف (ارقام و ستون‌های DB ساختگی، مراجع ناموجود، فایل ناموجود). پذیرفته‌ها: تبیین M2 و M3، نسبت خام وزن استانی، سه مرجع تازه‌ی راستی‌آزمایی‌شده (Ezugwu 2022، Rodriguez 2019، Sinaga و Yang 2020)، یادداشت گردکردن؛ جزئیات در `reports/review_final/triage_response.md`. گزارش نهایی بازمونتاژ شد (`phase2_final_report.md`، docx پیش‌نویس، xlsx).
