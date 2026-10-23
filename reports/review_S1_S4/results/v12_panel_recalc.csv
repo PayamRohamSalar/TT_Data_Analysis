@@ -1,0 +1,13 @@
+metric,claimed,calculated
+"Key (customer_id, y) unique",True,True
+1404 Model count,"636,016",636016
+1404 Idle count,"66,191",66191
+1404 Newcomer count,"10,126",10126
+1404 Institutional count,574,574
+1404 Partial other count,1,1
+1404 Total,"712,908",712908
+bal_dec 1400 (Hemmat),24.81,24.81
+bal_dec 1401 (Hemmat),32.75,32.75
+bal_dec 1402 (Hemmat),47.27,47.27
+bal_dec 1403 (Hemmat),63.96,63.96
+bal_dec 1404 (Hemmat),84.77,84.77

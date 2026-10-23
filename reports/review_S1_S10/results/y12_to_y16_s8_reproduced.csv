@@ -1,0 +1,17 @@
+task,reproduced,claimed
+Y12_customer_coverage_pct,84.5,84.5
+Y12_deposit_coverage_pct,91.0,91.0
+Y12_loan_coverage_pct,98.7,98.7
+Y12_c6_coverage_pct,47.4,47.4
+Y13_cramers_v,0.058,0.058
+Y14_spearman_npl,0.87,0.87
+Y14_spearman_ldr,0.9,0.9
+Y14_spearman_dep_res,0.96,0.96
+Y14_spearman_loan_share,0.98,0.98
+Y15_setad_customers,2427.0,2427.0
+Y15_setad_loan_hemat,12.78,12.78
+Y15_shob_customers,3765.0,3765.0
+Y15_shob_dep_hemat,9.91,9.91
+Y16_top10_npl_share_pct,77.2,77.2
+Y16_top10_dep_share_pct,57.9,57.9
+Y16_top10_cust_share_pct,22.6,22.6

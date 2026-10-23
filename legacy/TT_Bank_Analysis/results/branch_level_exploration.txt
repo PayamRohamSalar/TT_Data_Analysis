@@ -1,0 +1,21 @@
+Branch-Level / General Ledger Table Search
+======================================================================
+Generated at: 2026-07-26 18:36:57
+
+Total tables/views in database (all schemas): 10
+Full table list:
+  [dbo].[Customer_Monthly_Activity] (BASE TABLE)
+  [dbo].[Customer_Profile] (BASE TABLE)
+  [dbo].[Deposit_Accoutnt_Info] (BASE TABLE)
+  [dbo].[Deposit_Customer] (BASE TABLE)
+  [dbo].[Deposit_Monthly_Activity] (BASE TABLE)
+  [dbo].[Loan_Contract_Info] (BASE TABLE)
+  [dbo].[Loan_Grant_Customer] (BASE TABLE)
+  [dbo].[Loan_Monthly_Activity] (BASE TABLE)
+  [dbo].[Loan_Remain] (BASE TABLE)
+  [dbo].[Loan_Remain_Customer] (BASE TABLE)
+
+Keywords used: ['branch', 'shob', 'shoab', 'gl', 'ledger', 'profit', 'interest', 'mali', 'amalkard', 'report', 'stat']
+Matched tables/views: 0
+----------------------------------------------------------------------
+No table or view names matched the given keywords.

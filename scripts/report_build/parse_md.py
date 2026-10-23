@@ -12,8 +12,9 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SRC = ROOT / "reports" / "phase1_final_report.md"
-FIG_DIR = ROOT / "reports" / "figures" / "phase1_market_overview"
+import sys
+SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "reports" / "phase1_final_report.md"
+FIG_DIR = ROOT / "reports" / "figures" / ("phase2_final" if "phase2" in str(SRC) else "phase1_market_overview")
 CACHE = Path(__file__).resolve().parent / ".cache"
 CACHE.mkdir(exist_ok=True)
 
@@ -92,8 +93,13 @@ def main():
         if m:
             src = FIG_DIR / Path(m.group(2)).name
             w, h = png_size(src) if src.exists() else (0, 0)
-            blocks.append({"type": "image", "alt": m.group(1), "src": m.group(2), "exists": src.exists(), "w": w, "h": h})
-            i += 1
+            alt = m.group(1); i += 1
+            j = i
+            while j < n and lines[j].strip() == "":
+                j += 1
+            if j < n and re.match(r"^\*\*نمودار .*\*\*$", lines[j].strip()):   # عنوان زیر نمودار (خط پررنگ پس از تصویر) جایگزین alt می‌شود
+                alt = lines[j].strip()[2:-2]; i = j + 1
+            blocks.append({"type": "image", "alt": alt, "src": m.group(2), "exists": src.exists(), "w": w, "h": h})
             continue
         hm = re.match(r"^(#{1,3})\s+(.*)$", st)
         if hm:

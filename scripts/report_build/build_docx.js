@@ -9,7 +9,7 @@ const {
 
 const ROOT = path.resolve(__dirname, "..", "..");
 const blocks = JSON.parse(fs.readFileSync(path.join(__dirname, ".cache", "report_blocks.json"), "utf8"));
-const FIG_DIR = path.join(ROOT, "reports", "figures", "phase1_market_overview");
+const FIG_DIR = path.join(ROOT, "reports", "figures", process.env.FIG_SUBDIR || "phase1_market_overview");
 
 const FONT = "B Nazanin";
 const fnt = (latin, cs) => ({ ascii: latin, hAnsi: latin, cs, eastAsia: cs });

@@ -1,0 +1,7 @@
+outcome,claimed_base,calculated_base_n,claimed_rate,calculated_rate
+loan_uptake,Non-borrowers,270167,12.3%,12.28%
+balance_halved,Positive balance,573849,31.4%,31.35%
+dormant_next,All 1403 model,591369,8.9%,8.85%
+npl_entry,Borrowers with 0 NPL,284990,13.5%,13.49%
+balance_halved_real,Positive real balance,573869,N/A (sensitivity),38.04%
+exit_1403_to_1404,All 1403 model,591369,N/A,0.0034% (20 customers)

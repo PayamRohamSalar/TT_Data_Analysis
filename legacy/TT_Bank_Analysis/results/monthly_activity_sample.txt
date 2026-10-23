@@ -1,0 +1,24 @@
+Customer_Monthly_Activity - Lightweight Schema Check (TOP 5 rows)
+======================================================================
+Generated at: 2026-07-26 17:24:50
+
+COLUMN LIST (9 columns)
+----------------------------------------------------------------------
+  main_customer_id
+  year_mount
+  sum_creditor_circul_amount_eq
+  sum_debtor_circul_amount_eq
+  sum_creditor_circul_count
+  sum_debtor_circul_count
+  code
+  title
+  amount_eq
+
+SAMPLE ROWS (TOP 5)
+----------------------------------------------------------------------
+ main_customer_id  year_mount  sum_creditor_circul_amount_eq  sum_debtor_circul_amount_eq  sum_creditor_circul_count  sum_debtor_circul_count   code                                            title  amount_eq
+     1.727929e+10    139908.0                     13500000.0                   14291206.0                        2.0                     10.0 "2385"                    "کارمزد تشکيل پرونده اعتباري"   288000.0
+     2.361270e+10    139908.0                            0.0                      50000.0                        0.0                      1.0 "2423" "کارمزد دريافتي بابت تهيه گزارش اطلاعات اعتباري"   900000.0
+     2.361270e+10    139908.0                            0.0                      50000.0                        0.0                      1.0 "2385"                    "کارمزد تشکيل پرونده اعتباري"   360000.0
+     2.142326e+09    139908.0                   5774800616.0                 5747390000.0                       12.0                     57.0 "2423" "کارمزد دريافتي بابت تهيه گزارش اطلاعات اعتباري"   600000.0
+     4.368655e+09    139908.0                     55110647.0                   52431150.0                       14.0                     93.0 "2423" "کارمزد دريافتي بابت تهيه گزارش اطلاعات اعتباري"   600000.0

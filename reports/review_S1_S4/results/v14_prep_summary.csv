@@ -1,0 +1,6 @@
+metric,claimed,found,status
+Reference Year,1404,1404,PASS
+Reference Population,"1404 Model (636,016)","636,016",PASS
+Mean/Std/Lo/Hi match 1404 model (no leakage),Exact match (< 1e-6),Max diff = 0.00e+00,PASS
+Quantile alignment columns,"Only 8 monetary columns, positive values only","8 columns: ['bal_mean_r', 'bal_end_r', 'cr_sum_r', 'db_sum_r', 'ticket_cr_r', 'ticket_db_r', 'loan_dec_r', 'guar_dec_r']",PASS
+Block weights formula 1/sqrt(n_features),Exact,Max diff = 0.00e+00,PASS

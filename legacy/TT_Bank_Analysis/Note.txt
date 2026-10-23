@@ -1,0 +1,13 @@
+# Run Commands
+python schema_matcher.py
+python export_db_samples.py
+python db_summary.py
+
+import pandas as pd
+from db_config import get_engine
+
+engine = get_engine()
+
+# اجرای مستقیم هر کوئری روی دیتابیس 200 گیگابایتی
+# data = pd.read_sql("SELECT TOP 10 * FROM YourTableName", engine)
+# print(data)

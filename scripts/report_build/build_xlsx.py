@@ -31,6 +31,8 @@ for b in blocks:
         if m:
             cur_sheet = "فصل " + m.group(1)
             started = True
+        elif t.startswith("پیوست") and ":" in t and "واژه" not in t:
+            cur_sheet, started = t.split(":")[0].strip(), True
         elif t.startswith("خلاصه‌ی مدیریتی"):
             cur_sheet, started = "خلاصه‌ی مدیریتی", True
         else:

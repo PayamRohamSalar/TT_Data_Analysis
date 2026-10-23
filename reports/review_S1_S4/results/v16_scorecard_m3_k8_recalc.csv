@@ -1,0 +1,6 @@
+metric,claimed,calculated,diff
+min_share,0.025155,0.025155,1.73e-17
+entropy,0.946188,0.946188,1.11e-16
+adjr2_dormant_next,0.166190,0.166190,8.33e-17
+lift_dormant_next,7.480857,7.480857,0.00e+00
+tree_fidelity,0.782420,0.782420,0.00e+00

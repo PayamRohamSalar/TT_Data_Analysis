@@ -1,0 +1,46 @@
+Interest-Paid-to-Depositors Exploration
+======================================================================
+Generated at: 2026-07-26 17:43:53
+
+TASK 1: Customer_Monthly_Activity - title LIKE N'%سود%'
+----------------------------------------------------------------------
+Distinct (code, title) combinations found: 0
+
+      code   record_count      total_amount_eq  title
+
+TASK 2: Deposit tables - Balance / Interest Rate column search
+----------------------------------------------------------------------
+Table: Deposit_Monthly_Activity (8 columns)
+    customer_id (numeric)
+    deposit_id (numeric)
+    year_mount (numeric)
+    sum_creditor_circul_amount_eq (numeric)
+    sum_debtor_circul_amount_eq (numeric)
+    sum_creditor_circul_count (numeric)
+    sum_debtor_circul_count (numeric)
+    avr_total_amount_eq (numeric)
+  Balance-keyword matches: ['sum_creditor_circul_amount_eq', 'sum_debtor_circul_amount_eq', 'avr_total_amount_eq']
+  Rate-keyword matches: NONE
+  Sample (TOP 5) of matched columns:
+   sum_creditor_circul_amount_eq  sum_debtor_circul_amount_eq  avr_total_amount_eq
+                      50325536.0                  100928669.0           32129864.0
+                     231379840.0                  239819174.0           51691875.0
+                             0.0                          0.0                  0.0
+                             0.0                          0.0           45000066.0
+                             0.0                          0.0                  0.0
+
+Table: Deposit_Accoutnt_Info (7 columns)
+    MAIN_CUSTOMER_ID (nvarchar)
+    DEPOSIT_ID (nvarchar)
+    OPEN_DATE (nvarchar)
+    CLOSE_DATE (nvarchar)
+    EXPIRE_DATE (nvarchar)
+    STATUS_NAME (nvarchar)
+    MAINTYPE_NAME (nvarchar)
+  Balance-keyword matches: NONE
+  Rate-keyword matches: NONE
+
+Table: Deposit_Customer (1 columns)
+    CUSTOMER_ID (numeric)
+  Balance-keyword matches: NONE
+  Rate-keyword matches: NONE

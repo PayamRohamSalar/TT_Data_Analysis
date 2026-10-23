@@ -1,0 +1,3 @@
+Contractual Primary: 99.4523 hemat
+Inferred Primary: 25.5205 hemat
+Total Attributed: 124.9728 hemat

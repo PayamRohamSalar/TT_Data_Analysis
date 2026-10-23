@@ -1,0 +1,88 @@
+Legal Entities & Company Size Analysis - Customer_Profile
+======================================================================
+Generated at: 2026-07-26 16:28:59
+
+1) real_or_legal distribution (full table)
+----------------------------------------------------------------------
+NOTE: raw values contain literal quote characters and padding, e.g. '"حقوقي     "' (len=12). Cleaned with LTRIM/RTRIM/REPLACE before grouping.
+          'حقوقي':     38,477 rows (5.36%)
+          'حقيقي':    679,659 rows (94.64%)
+            TOTAL:    718,136 rows
+
+=> CONCLUSION: Legal entities DO exist beyond the initial individual-only 100-row sample.
+
+2) 'age' column analysis - Establishment Year hypothesis
+----------------------------------------------------------------------
+Hypothesis to test: for legal entities, does 'age' actually hold an Establishment Year in the Persian calendar (expected range ~1300-1450), rather than a human age?
+
+  Legal (حقوقي)      -> min=0.0, max=119.0, avg=14.22, nulls=1096.0, n=38477.0
+  Individual (حقيقي) -> min=1.0, max=122.0, avg=42.91, nulls=0.0, n=679659.0
+
+  Top 15 most frequent 'age' values for legal entities:
+    age=  18.0 -> 2,293.0 rows
+    age=   2.0 -> 2,239.0 rows
+    age=   3.0 -> 1,993.0 rows
+    age=   5.0 -> 1,974.0 rows
+    age=   4.0 -> 1,805.0 rows
+    age=   8.0 -> 1,601.0 rows
+    age=   7.0 -> 1,598.0 rows
+    age=   6.0 -> 1,569.0 rows
+    age=  10.0 -> 1,467.0 rows
+    age=   9.0 -> 1,385.0 rows
+    age=   1.0 -> 1,351.0 rows
+    age=  17.0 -> 1,231.0 rows
+    age=  13.0 -> 1,216.0 rows
+    age=  11.0 -> 1,178.0 rows
+    age=  19.0 -> 1,171.0 rows
+
+=> CONCLUSION: legal-entity 'age' values range 0.0-119.0 (avg 14.2), which is NOT consistent with a Persian-calendar establishment year (1300-1450). The range and average are far lower than the individual customers' age range/average (1.0-122.0, avg 42.9), which itself looks like genuine human age. Most likely interpretation: 'age' is reused for legal entities as 'years since establishment / years as a customer' (a small integer), NOT as the calendar year of establishment.
+
+3) Candidate 'Organizational Size' / classification fields (legal entities only)
+----------------------------------------------------------------------
+  job_name -> 1 distinct value(s):
+                    '""':   38,477
+  => Not usable: effectively always blank for legal entities.
+
+  membership_info -> 4 distinct value(s):
+                    '""':   38,473
+           '"CBS-76372"':        2
+           '"CBS-78054"':        1
+           '"CBS-77728"':        1
+  => Not usable for org size: blank for ~99.99% of legal entities; the few non-blank values are CBS-##### codes (system reference IDs, not a size/scale field).
+
+  membership_type_value -> 2 distinct value(s):
+              '"تعاوني"':   25,728
+          '"غير تعاوني"':   12,749
+  => This confirms the Cooperative (تعاوني) / Non-Cooperative (غير تعاوني) status field for legal entities, but it is NOT a size/scale indicator.
+
+  practitioner_count -> BEST CANDIDATE for 'Organizational Size':
+    Legal entities:      total=38,477, numeric=36,417 (94.6%), blank=2,060 (5.4%)
+    Individual customers: total=679,659, numeric=0 (0.00%), blank=679,597 (99.99%)
+    Individual non-numeric noise values found: ['تعاوني,', 'غير تعاوني,', 'کارمند,تعاوني,', 'کارگر,تعاوني,']
+
+    Legal-entity numeric distribution (raw, before outlier handling):
+      count=36417  min=0  25%=4  median=7  75%=8  max=76234194  mean=4278.4
+      97.6% of numeric values are <= 100 (plausible employee-count range).
+      92 record(s) (>1000) look like data-entry errors/outliers (e.g. 7-8 digit values such as 76,234,194) and should be capped or excluded in downstream modeling.
+      Most frequent values:
+                 7: 12,114
+                 3:  5,840
+                 5:  4,475
+                10:  3,531
+                 2:  1,924
+                 4:  1,333
+                20:    943
+                 1:    745
+                50:    522
+                 6:    475
+
+=> CONCLUSION: 'practitioner_count' is essentially unused for individual customers (0.00% numeric, rest blank/noise) but is populated for 94.6% of legal entities with small integers concentrated in the 1-100 range (median ~7). This strongly matches 'number of employees / practitioners' i.e. an Organizational Size proxy, not job_name/membership_info. A small number of extreme outliers exist and need cleaning before use.
+
+======================================================================
+SUMMARY
+----------------------------------------------------------------------
+- Legal entities in full DB: 38,477 (5.36% of all customers)
+- 'age' for legal entities is NOT a Persian establishment year; likely a small 'years since establishment/relationship' integer reusing the same column as human age.
+- job_name and membership_info carry no usable org-size/industry information for legal entities.
+- membership_type_value only encodes Cooperative/Non-Cooperative status (already known).
+- practitioner_count is the best available proxy for Organizational Size (employee count), populated for ~94-95% of legal entities, needs outlier cleaning.

@@ -1,0 +1,61 @@
+LOAN_PREFERED_RATE - Frequency Distribution Extraction
+Table: Loan_Contract_Info
+======================================================================
+Generated at: 2026-07-26 17:14:40
+
+RECORD COUNTS
+----------------------------------------------------------------------
+Total records (Loan_Contract_Info): 780790
+Null records: 0
+Blank records: 0
+Non-numeric records: 0
+Valid numeric records: 780790
+
+CATEGORICAL BREAKDOWN
+----------------------------------------------------------------------
+LOAN_PREFERED_RATE < 0 (Negative): 45974
+LOAN_PREFERED_RATE == 0 (Zero): 680794
+LOAN_PREFERED_RATE > 0 (Positive): 54022
+
+FULL FREQUENCY DISTRIBUTION (sorted ascending by value)
+----------------------------------------------------------------------
+  LOAN_PREFERED_RATE        count
+               -19.0          378
+               -18.0          243
+               -17.0         5249
+               -16.0          656
+               -15.0          556
+               -14.0         4884
+               -13.0         1809
+               -12.0          220
+               -11.0         2834
+               -10.0          574
+                -9.0         2330
+                -8.0         7782
+                -7.0          276
+                -6.0         1351
+                -5.0         7003
+                -4.6            3
+                -4.0         4585
+                -3.0         3575
+                -2.5            8
+                -2.0         1246
+                -1.0          412
+                 0.0       680794
+                 1.0          375
+                 2.0          426
+                 3.0          483
+                 4.0         6286
+                 5.0          400
+                 6.0         1626
+                 7.0           10
+                 8.0         2830
+                 9.0          503
+                10.0        20728
+                12.0         2337
+                14.0         8264
+                15.0          240
+                18.0          285
+                20.0           85
+                21.0           19
+                23.0         9125

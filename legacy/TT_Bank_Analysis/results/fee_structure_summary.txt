@@ -1,0 +1,30 @@
+Customer_Monthly_Activity - Fee Code Verification & Aggregation Check
+======================================================================
+Generated at: 2026-07-27 10:10:11
+Fee keywords used: ['کارمزد', 'کارمزدها', 'حق الزحمه']
+
+1) MATCHED FEE CODES/TITLES
+----------------------------------------------------------------------
+Distinct (code, title) fee combinations found: 5
+
+      code   record_count      total_amount_eq  title
+    "2423"       20043487     22490112364000.0  "کارمزد دريافتي بابت تهيه گزارش اطلاعات اعتباري"
+    "2385"       12242649      4145772104000.0  "کارمزد تشکيل پرونده اعتباري"
+    "6157"         480710       950403890367.0  "کارمزد بررسي و تصويب امهال"
+    "2409"         441401        85106651000.0  "کارمزد دريافتي - ساير کارمزدها"
+    "2419"            419        41313394344.0  "کارمزد مرابحه"
+
+2) OVERALL TOTALS (all matched fee records)
+----------------------------------------------------------------------
+Total fee records: 33208666.0
+Total fee amount_eq (sum): 27712708403711.0
+Distinct customers with fee records: 328789.0
+
+3) MULTI-CODE PER CUSTOMER-MONTH CHECK
+----------------------------------------------------------------------
+FULL-TABLE QUERY FAILED - could not complete due to a database error.
+Error detail: (pyodbc.ProgrammingError) ('42000', "[42000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Could not allocate a new page for database 'TEMPDB' because the 'DEFAULT' filegroup is full due to lack of storage space or database files reaching the maximum allowed size. Note that UNLIMITED files are still limited to 16TB. Create the necessary space by dropping objects in the filegroup, adding additional files to the filegroup, or setting autogrowth on for existing files in the filegroup. (1101) (SQLExecDirectW)")
+
+Retrying with scope reduced to a single year_mount (most recent month)...
+Scope: year_mount = 140412.0
+Customer-month combinations with more than one distinct fee code (scoped): 179741

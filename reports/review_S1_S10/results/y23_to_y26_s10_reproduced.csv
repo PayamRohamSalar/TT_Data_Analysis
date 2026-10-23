@@ -1,0 +1,13 @@
+task,reproduced,claimed
+Y23_assignments_total_rows,3030475,3030475
+Y23_unique_key_customer_year,True,True
+Y23_year_counts_match,True,True
+Y23_cluster_col_match,True,True
+Y23_prev_segment_match_pct,100.0,100.0
+Y23_next_segment_match_pct,100.0,100.0
+Y24_tm_pooled_aligned_sum,2317567,2317567
+Y24_next_segment_x_total,875,875
+Y25_attributes_1404_rows,712908,712908
+Y25_defs_i_customers,66192,66192
+Y25_has_single_o_customer_explained,True,True
+Y26_readme_consistency_verified,True,True

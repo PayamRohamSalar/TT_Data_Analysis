@@ -1,0 +1,8 @@
+metric,claimed,calculated
+"Key (customer_id, y) unique",True,True
+"flow_ratio range [0, 1]","[0, 1]","[0.0000, 1.0000]"
+"turn_share range [0, 1]","[0, 1]","[0.0000, 1.0000]"
+"drawdown range [0, 1]","[0, 1]","[0.0000, 1.0000]"
+"npl_share range [0, 1]","[0, 1]","[0.0000, 1.0000]"
+Sum of account type shares close to 1.0,1.000 for 99.97%,100.00%
+Sum of loan_dec_r in 1404 (Hemmat),124.97,124.97

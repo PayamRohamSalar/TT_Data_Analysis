@@ -1,0 +1,37 @@
+USED_COST / APPROVED_AMOUNT Ratio - Raw Statistical Extraction
+Table: Loan_Contract_Info
+======================================================================
+Generated at: 2026-07-26 17:04:48
+
+RECORD COUNTS
+----------------------------------------------------------------------
+Total records (Loan_Contract_Info): 780790
+NULL APPROVED_AMOUNT: 0
+Zero APPROVED_AMOUNT: 0
+Records after filtering (APPROVED_AMOUNT not null and not zero): 780790
+NULL USED_COST within filtered records: 0
+Valid ratio records: 780790
+
+DESCRIPTIVE STATISTICS (Collateral_Coverage_Ratio)
+----------------------------------------------------------------------
+Min: 0.0
+Max: 737262.4742177557
+Mean: 3.6685434019305814
+Median: 1.2
+
+PERCENTILES (Collateral_Coverage_Ratio)
+----------------------------------------------------------------------
+P5: 0.23691274315571897
+P10: 1.0
+P25: 1.2
+P50: 1.2
+P75: 1.561783484
+P90: 1.75
+P95: 2.0
+P99: 3.3333333333333335
+
+RATIO DISTRIBUTION COUNTS
+----------------------------------------------------------------------
+Ratio == 0: 5107
+Ratio < 1.0: 71761
+Ratio >= 1.0: 709029

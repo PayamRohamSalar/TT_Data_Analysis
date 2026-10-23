@@ -1,0 +1,10 @@
+metric,claimed,calculated,raw_value
+V3 Total Loan Balance (Hemmat),128.2,128.16,1281628119052734.0
+V4 Contractual Main Borrowers,"355,463","355,464",355464.0
+V4 Inferred Borrowers,"17,612","52,944",52944.0
+V4 Total Primary Borrowers (without overlap),"373,075","373,076",373076.0
+V4 Sum (Contractual + Inferred),"373,075","408,408",408408.0
+V5 Contracts without Record,"128,639","637,975",637975.0
+V5 Single-party Contracts,"108,674","519,372",519372.0
+V5 Balance Share Single-Party (%),88.9%,88.89%,88.88983004089013
+V6 Multi MAIN_CUSTOMER_ID per LOANFILE_ID,0,0,0.0

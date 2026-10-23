@@ -1,0 +1,14 @@
+check,reproduced,claimed
+Z1_kselect_v2_k4_half_ari,0.7242,0.72
+Z1_kselect_v2_k4_temporal_ari,0.9151,0.915
+Z1_kselect_v2_k4_auc_npl,0.6,0.6
+Z1_kselect_v2_k4_min_share,3.83,3.8
+Z1_kselect_v2_ari_with_main,0.0469,0.05
+Z2_v2_c23_npl_share,85.89,85.9
+Z3_no_ledger_share_pct,8.31,8.3
+Z3_no_ledger_npl_share_pct,67.52,67.5
+Z3_no_ledger_npl_ratio_pct,27.17,27.2
+Z3_has_ledger_npl_ratio_pct,3.59,3.6
+Z5_total_deposit_hemat,84.77,84.77
+Z5_total_loan_hemat,124.97,124.97
+Z5_total_npl_hemat,10.66,10.66

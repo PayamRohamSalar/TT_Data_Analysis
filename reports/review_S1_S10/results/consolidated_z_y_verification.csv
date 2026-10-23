@@ -1,0 +1,101 @@
+﻿group,item,claimed,reproduced,status,script
+Z1-Z6,Z1_kselect_v2_k4_half_ari,0.72,0.7242,تأیید با اختلاف ناچیز گردکردن,audit_z01_to_z06.py
+Z1-Z6,Z1_kselect_v2_k4_temporal_ari,0.915,0.9151,تأیید کامل (انطباق ۱۰۰٪),audit_z01_to_z06.py
+Z1-Z6,Z1_kselect_v2_k4_auc_npl,0.6,0.6,تأیید کامل (انطباق ۱۰۰٪),audit_z01_to_z06.py
+Z1-Z6,Z1_kselect_v2_k4_min_share,3.8,3.83,تأیید با اختلاف ناچیز گردکردن,audit_z01_to_z06.py
+Z1-Z6,Z1_kselect_v2_ari_with_main,0.05,0.0469,اختلاف جزئی یا نیازمند قید,audit_z01_to_z06.py
+Z1-Z6,Z2_v2_c23_npl_share,85.9,85.89,تأیید با اختلاف ناچیز گردکردن,audit_z01_to_z06.py
+Z1-Z6,Z3_no_ledger_share_pct,8.3,8.31,تأیید با اختلاف ناچیز گردکردن,audit_z01_to_z06.py
+Z1-Z6,Z3_no_ledger_npl_share_pct,67.5,67.52,تأیید با اختلاف ناچیز گردکردن,audit_z01_to_z06.py
+Z1-Z6,Z3_no_ledger_npl_ratio_pct,27.2,27.17,تأیید با اختلاف ناچیز گردکردن,audit_z01_to_z06.py
+Z1-Z6,Z3_has_ledger_npl_ratio_pct,3.6,3.59,تأیید با اختلاف ناچیز گردکردن,audit_z01_to_z06.py
+Z1-Z6,Z5_total_deposit_hemat,84.77,84.77,تأیید کامل (انطباق ۱۰۰٪),audit_z01_to_z06.py
+Z1-Z6,Z5_total_loan_hemat,124.97,124.97,تأیید کامل (انطباق ۱۰۰٪),audit_z01_to_z06.py
+Z1-Z6,Z5_total_npl_hemat,10.66,10.66,تأیید کامل (انطباق ۱۰۰٪),audit_z01_to_z06.py
+Y1-Y6 (S6),Y1_total_deposit_hemat,84.77,84.77,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y1_total_loan_hemat,124.97,124.97,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y1_total_npl_hemat,10.66,10.66,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y2_c1_dep_share,60.8,60.8,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y2_c1_loan_share,51.4,51.4,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y2_c1_npl_share,37.5,37.5,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y2_t_loan_share,8.7,8.7,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y2_t_npl_share,30.1,30.1,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y2_t_npl_ratio,29.7,29.7,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y2_c4_npl_share,10.1,10.1,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y2_c4_borrowers_count,1223.0,1223.0,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y3_dep_top1pct_share,78.7,78.7,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y3_dep_top10pct_share,96.5,96.5,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y3_loan_top1pct_share,62.2,62.2,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y3_loan_top10pct_share,83.5,83.5,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y3_npl_top1pct_share,93.6,93.6,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y3_gini_deposit,0.972,0.972,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y3_gini_npl,0.995,0.995,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y4_c1_cross_sell_count,10135.0,10135.0,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y4_c1_cross_sell_dep_hemat,28.13,28.13,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y5_c1_late30,15.2,15.2,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y5_c4_late30,47.3,47.3,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y5_c7_late30,52.3,52.3,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y5_t_late30,59.8,59.8,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y6_c1_interest_index,7.7,7.7,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y6_s_interest_index,9.8,9.8,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y1-Y6 (S6),Y6_c8_interest_index,1.5,1.5,تأیید کامل (انطباق ۱۰۰٪),audit_y01_to_y06.py
+Y7-Y11 (S7),Y7_total_assignments_rows,3030475.0,3030475.0,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y7_1404_match_s5,100.0,100.0,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y8_c1_stay_rate,81.1,81.1,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y8_c7_stay_rate,12.0,12.0,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y8_c7_to_t_rate,55.7,55.7,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y8_t_stay_rate,63.3,63.2,تأیید با اختلاف ناچیز گردکردن,audit_y07_to_y11.py
+Y7-Y11 (S7),Y9_customers_5yr_count,467892.0,467892.0,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y9_customers_5yr_zero_changes_pct,9.9,9.9,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y10_1400_match_share,0.854,0.854,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y10_1400_ari,0.688,0.688,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y10_1403_match_share,0.961,0.961,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y10_1403_ari,0.908,0.908,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y11_c7_npl_entry_rate,17.1,17.1,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y11_t_npl_entry_rate,12.4,12.4,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y7-Y11 (S7),Y11_c5_npl_entry_rate,0.8,0.8,تأیید کامل (انطباق ۱۰۰٪),audit_y07_to_y11.py
+Y12-Y16 (S8),Y12_customer_coverage_pct,84.5,84.5,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y12_deposit_coverage_pct,91.0,91.0,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y12_loan_coverage_pct,98.7,98.7,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y12_c6_coverage_pct,47.4,47.4,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y13_cramers_v,0.058,0.058,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y14_spearman_npl,0.87,0.87,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y14_spearman_ldr,0.9,0.9,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y14_spearman_dep_res,0.96,0.96,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y14_spearman_loan_share,0.98,0.98,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y15_setad_customers,2427.0,2427.0,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y15_setad_loan_hemat,12.78,12.78,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y15_shob_customers,3765.0,3765.0,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y15_shob_dep_hemat,9.91,9.91,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y16_top10_npl_share_pct,77.2,77.2,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y16_top10_dep_share_pct,57.9,57.9,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y12-Y16 (S8),Y16_top10_cust_share_pct,22.6,22.6,تأیید کامل (انطباق ۱۰۰٪),audit_y12_to_y16.py
+Y17-Y22 (S9),Y17_deposit_band_ratios_match,"[0.049, 0.249, 0.197, 2.257, 5.653, 11.638]","[0.049, 0.249, 0.197, 2.257, 5.653, 11.638]",تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y17-Y22 (S9),Y17_deposit_weighted_hemat,18.75,18.75,تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y17-Y22 (S9),Y18_hyp_a_toman_ratios,"[0.08, 0.18, 0.11, 0.79, 1.01, 1.3]","[0.08, 0.16, 0.1, 0.64, 0.82, 0.97]",تأیید تحلیلی / فرضیه,audit_y17_to_y22.py
+Y17-Y22 (S9),Y18_hyp_a_weighted_hemat,Failed (>1 in top bands),169.3,تأیید تحلیلی / فرضیه,audit_y17_to_y22.py
+Y17-Y22 (S9),Y18_all_hypotheses_failed_rejection_valid,True,True,تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y17-Y22 (S9),Y19_loan_band_ratios_match,"[0.137, 0.693, 0.619, 0.94, 0.99, 1.531]","[0.137, 0.693, 0.619, 0.94, 0.99, 1.531]",تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y17-Y22 (S9),Y19_loan_weighted_hemat,150.63,150.63,تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y17-Y22 (S9),Y20_w_dep_tehran,1.32,1.2,اختلاف جزئی یا نیازمند قید,audit_y17_to_y22.py
+Y17-Y22 (S9),Y20_w_dep_kordestan,3.67,3.34,اختلاف جزئی یا نیازمند قید,audit_y17_to_y22.py
+Y17-Y22 (S9),Y20_dep_weighted_prov_hemat,133.09,133.09,تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y17-Y22 (S9),Y21_raking_loan_hemat,158.72,158.72,تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y17-Y22 (S9),Y21_raking_npl_hemat,8.88,8.88,تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y17-Y22 (S9),Y21_raking_npl_ratio_pct,5.6,5.6,تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y17-Y22 (S9),Y22_c1_loan_share_min,38.7,38.7,تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y17-Y22 (S9),Y22_c1_loan_share_max,51.4,51.4,تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y17-Y22 (S9),Y22_c1_npl_share_min,29.2,29.2,تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y17-Y22 (S9),Y22_c1_npl_share_max,37.5,37.5,تأیید کامل (انطباق ۱۰۰٪),audit_y17_to_y22.py
+Y23-Y26 (S10),Y23_assignments_total_rows,3030475,3030475,تأیید کامل (انطباق ۱۰۰٪),audit_y23_to_y26.py
+Y23-Y26 (S10),Y23_unique_key_customer_year,True,True,تأیید کامل (انطباق ۱۰۰٪),audit_y23_to_y26.py
+Y23-Y26 (S10),Y23_year_counts_match,True,True,تأیید کامل (انطباق ۱۰۰٪),audit_y23_to_y26.py
+Y23-Y26 (S10),Y23_cluster_col_match,True,True,تأیید کامل (انطباق ۱۰۰٪),audit_y23_to_y26.py
+Y23-Y26 (S10),Y23_prev_segment_match_pct,100.0,100.0,تأیید کامل (انطباق ۱۰۰٪),audit_y23_to_y26.py
+Y23-Y26 (S10),Y23_next_segment_match_pct,100.0,100.0,تأیید کامل (انطباق ۱۰۰٪),audit_y23_to_y26.py
+Y23-Y26 (S10),Y24_tm_pooled_aligned_sum,2317567,2317567,تأیید کامل (انطباق ۱۰۰٪),audit_y23_to_y26.py
+Y23-Y26 (S10),Y24_next_segment_x_total,875,875,تأیید کامل (انطباق ۱۰۰٪),audit_y23_to_y26.py
+Y23-Y26 (S10),Y25_attributes_1404_rows,712908,712908,تأیید کامل (انطباق ۱۰۰٪),audit_y23_to_y26.py
+Y23-Y26 (S10),Y25_defs_i_customers,66192,66192,تأیید کامل (انطباق ۱۰۰٪),audit_y23_to_y26.py
+Y23-Y26 (S10),Y25_has_single_o_customer_explained,True,True,تأیید کامل (انطباق ۱۰۰٪),audit_y23_to_y26.py
+Y23-Y26 (S10),Y26_readme_consistency_verified,True,True,تأیید کامل (انطباق ۱۰۰٪),audit_y23_to_y26.py

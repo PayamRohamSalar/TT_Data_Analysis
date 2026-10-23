@@ -1,0 +1,16 @@
+task,reproduced,claimed
+Y7_total_assignments_rows,3030475.0,3030475.0
+Y7_1404_match_s5,100.0,100.0
+Y8_c1_stay_rate,81.1,81.1
+Y8_c7_stay_rate,12.0,12.0
+Y8_c7_to_t_rate,55.7,55.7
+Y8_t_stay_rate,63.2,63.3
+Y9_customers_5yr_count,467892.0,467892.0
+Y9_customers_5yr_zero_changes_pct,9.9,9.9
+Y10_1400_match_share,0.854,0.854
+Y10_1400_ari,0.688,0.688
+Y10_1403_match_share,0.961,0.961
+Y10_1403_ari,0.908,0.908
+Y11_c7_npl_entry_rate,17.1,17.1
+Y11_t_npl_entry_rate,12.4,12.4
+Y11_c5_npl_entry_rate,0.8,0.8
